@@ -20,12 +20,11 @@ class Squat(ExerciseInterface):
             #left Leg Angle
             leftLeg = [lmlist[val][:-1] for val in [23,25,27]]
             self.leftLegAngle,img = pd.findAngle(leftLeg[0],leftLeg[1],leftLeg[2],img)
-            print(self.rightLegAngle,self.leftLegAngle)
-
+            
         def percentCalculation(self):
-            #calculating the pushpup hand angle accuracy
-            self.rightLegAccuracy = np.interp(self.rightLegAngle,(220,320),(0,100))
-            self.leftLegAccuracy = np.interp(self.leftLegAngle,(220,320),(0,100))
+            #calculating the squat hand angle accuracy
+            self.rightLegAccuracy = np.interp(self.rightLegAngle,(215,330),(0,100))
+            self.leftLegAccuracy = np.interp(self.leftLegAngle,(215,330),(0,100))
             
 
         def Counter(self,img):
