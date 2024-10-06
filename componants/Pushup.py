@@ -23,8 +23,8 @@ class Pushup(ExerciseInterface):
 
     def percentCalculation(self):
         #calculating the pushpup hand angle accuracy
-        self.rightArmAccuracy = np.interp(self.rightArmAngle,(40,170),(0,100))
-        self.leftArmAccuracy = np.interp(self.leftArmAngle,(40,170),(0,100))
+        self.rightArmAccuracy = np.interp(self.rightArmAngle,(45,170),(0,100))
+        self.leftArmAccuracy = np.interp(self.leftArmAngle,(45,170),(0,100))
         
 
     def Counter(self,img):
