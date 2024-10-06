@@ -39,15 +39,13 @@ while 1:
     
     if(selected_exercise == ExcerciseForm.PUSHUP):
         pushup = Pushup("pushup",[16,14,12,11,13,15])
-        pushup.angleCalculation(img,lmlist)  # Output: Angle calculated for PushUp
+        pushup.angleCalculation(img,lmlist)
         pushup.percentCalculation()
         pushup.Counter(img)
 
-    # elif selected_exercise == ExcerciseForm.PLANK:
-    #     ExerciseInterface.getAngles(img,lmlist,[28,26,24,12,14,16,11,13,15,23,25,27])
     elif selected_exercise == ExcerciseForm.SQUAT :
         squat = Squat("squat",[28,26,24,23,25,27])
-        squat.angleCalculation(img,lmlist)  # Output: Angle calculated for PushUp
+        squat.angleCalculation(img,lmlist)
         squat.percentCalculation()
         squat.Counter(img)
 
