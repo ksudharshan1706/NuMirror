@@ -2,13 +2,14 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import pyttsx3  # For voice output
+from componants.Pushup import Pushup
 
 # Initialize text-to-speech engine
 engine = pyttsx3.init()
 
 # Initialize MediaPipe Pose
 mp_pose = mp.solutions.pose
-pose = mp_pose.Pose()
+pose = mp_pose.Pose(min_detection_confidence=0.7,min_tracking_confidence=0.7)
 mp_drawing = mp.solutions.drawing_utils
 
 # Function to calculate angle between three points
@@ -74,12 +75,17 @@ def recognize_exercise(landmarks):
     right_knee_angle = calculate_angle(right_hip, right_knee, right_ankle)
     right_elbow_angle = calculate_angle(right_shoulder, right_elbow, right_wrist)
 
+    right_back_angle = calculate_angle(right_shoulder,right_hip,right_knee)
+    left_back_angle = calculate_angle(left_shoulder,left_hip,left_knee)
+
+    # print("right_back_angle",right_back_angle)
+    # print("left_back_angle",left_back_angle)
 
     # Recognize squats based on knee angle
-    if left_knee_angle < 90 and right_knee_angle < 90:
+    if left_knee_angle < 75 and right_knee_angle < 75:
         return "Squats"
     # Recognize push-ups based on elbow angle
-    elif left_elbow_angle < 90 and right_elbow_angle < 90:
+    elif left_elbow_angle < 50 and right_elbow_angle < 50 and right_back_angle > 175:
         return "Push ups"
     else:
         return None
@@ -91,12 +97,12 @@ cap = cv2.VideoCapture(0)
 previous_Exercise = ""
 while cap.isOpened():
     ret, frame = cap.read()
-    image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    results = pose.process(image)
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-
+    # image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    results = pose.process(frame)
+    # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    frame = cv2.resize(frame,(1000,1000))
     if results.pose_landmarks:
-        mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
+        mp_drawing.draw_landmarks(frame, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
         # Recognize the exercise
         exercise = recognize_exercise(results.pose_landmarks.landmark)
@@ -104,10 +110,15 @@ while cap.isOpened():
         if exercise and previous_Exercise != exercise:
                 print(exercise,previous_Exercise,previous_Exercise != exercise)
                 previous_Exercise = exercise
-                engine.say(exercise)
-                engine.runAndWait()
+                # if  exercise == "Push ups":
+                #     pushup = Pushup("pushup",[16,14,12,11,13,15])
+                #     pushup.angleCalculation(frame,results.pose_landmarks.landmark)
+                #     pushup.percentCalculation()
+                #     pushup.Counter(img)
+                # engine.say(exercise)
+                # engine.runAndWait()
 
-    cv2.imshow('Exercise Recognition', image)
+    cv2.imshow('Exercise Recognition', frame)
 
     if cv2.waitKey(10) & 0xFF == ord('q'):
         break

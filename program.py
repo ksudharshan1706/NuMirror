@@ -17,7 +17,8 @@ class ExcerciseForm(Enum):
     CRUNCH = 4
     FORWARDCRUNCH = 5
 
-vid_red = cv2.VideoCapture("ForwardCrunch.mp4")
+# vid_red = cv2.VideoCapture("pushup.mp4")
+vid_red = cv2.VideoCapture(0)
 pd = PoseDetector(trackCon=0.70,detectionCon=0.70)
 dir = 0
 count = 0
@@ -28,10 +29,11 @@ Excersize = input().upper()
 while 1:
     ret,img = vid_red.read()
     if not ret:
-        vid_red = cv2.VideoCapture("ForwardCrunch.mp4")
+        # vid_red = cv2.VideoCapture("pushup.mp4")
+        vid_red = cv2.VideoCapture(0)
         continue
     pd.findPose(img,draw=0)
-    img = cv2.resize(img,(1500,1000))
+    img = cv2.resize(img,(1000,500))
     selected_exercise = ExcerciseForm[Excersize]
     lmlist,bbox = pd.findPosition(img,draw=0,bboxWithHands=0)
     if(len(lmlist) > 0):
